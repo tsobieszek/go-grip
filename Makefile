@@ -1,4 +1,4 @@
-.PHONY: all run format emojiscraper build vendor test compile format lint clean
+.PHONY: all run emojiscraper build vendor test compile format lint clean install
 
 # If the first argument is "run"...
 ifeq (run,$(firstword $(MAKECMDGOALS)))
@@ -46,5 +46,8 @@ lint: ## Run linter
 clean: ## Cleanup build dir
 	rm -r bin/
 
+install: build ## Install go-grip to /usr/local/bin
+	install -D -m 755 bin/go-grip /usr/local/bin/go-grip
+
 help: ## Display this help screen
-	@grep -h -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
+	@grep -h -E '^[a-zA-Z_-]+:.*?## .*$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $1, $2}'
