@@ -77,7 +77,9 @@ func (s *Server) Serve(file string) error {
 			htmlContent := s.parser.MdToHTML(bytes)
 
 			// Serve
+			title := path.Base(r.URL.Path)
 			err = serveTemplate(w, htmlStruct{
+				Title:        title,
 				Content:      string(htmlContent),
 				Theme:        s.theme,
 				BoundingBox:  s.boundingBox,
@@ -137,6 +139,7 @@ func readToString(dir http.Dir, filename string) ([]byte, error) {
 }
 
 type htmlStruct struct {
+	Title        string
 	Content      string
 	Theme        string
 	BoundingBox  bool
