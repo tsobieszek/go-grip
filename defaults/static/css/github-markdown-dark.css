@@ -1,4 +1,10 @@
 /* custom dark */
+@media (max-width: 939px) {
+  .container {
+    padding: 0 0.5em;
+  }
+}
+
 @media (min-width: 940px) {
   .container {
     max-width: 896px;
@@ -19,12 +25,6 @@
   padding: 32px;
 }
 
-.footer {
-  padding-top: 10px;
-  padding-bottom: 20px;
-  text-align: center;
-}
-
 /* dark */
 .markdown-body {
   color-scheme: dark;
@@ -33,7 +33,7 @@
   margin: 0;
   color: #f0f6fc;
   background-color: #0d1117;
-  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji";
+  font-family: 'Cambria', serif;
   font-size: 16px;
   line-height: 1.5;
   word-wrap: break-word;
@@ -139,7 +139,7 @@
 .markdown-body kbd,
 .markdown-body pre,
 .markdown-body samp {
-  font-family: monospace;
+  font-family: 'Cascadia Code', monospace;
   font-size: 1em;
 }
 
@@ -367,14 +367,13 @@
 .markdown-body tt,
 .markdown-body code,
 .markdown-body samp {
-  font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
   font-size: 12px;
 }
 
 .markdown-body pre {
   margin-top: 0;
   margin-bottom: 0;
-  font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
+  font-family: 'Cascadia Code', monospace;
   font-size: 12px;
   word-wrap: normal;
 }
@@ -1033,7 +1032,7 @@
 
 .markdown-body .task-list-item-checkbox {
   margin: 0 .2em .25em -1.4em;
-  vertical-align: middle;
+  vertical-.markdown-bodyign: middle;
 }
 
 .markdown-body ul:dir(rtl) .task-list-item-checkbox {
@@ -1123,3 +1122,15 @@
   margin-top: 0 !important;
 }
 
+body {
+    font-family: 'Cambria', serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: #4169E1; /* royalblue */
+    font-family: 'Cantarell', sans-serif;
+}
+
+code, pre {
+    font-family: 'Cascadia Code', monospace;
+}
