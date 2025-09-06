@@ -1,0 +1,6 @@
+#!/bin/sh
+file=$(readlink -f $1)
+
+port=6419
+url=http://127.0.0.1:$port${file}
+plumb $url

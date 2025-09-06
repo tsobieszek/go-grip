@@ -1,0 +1,6 @@
+type is text
+data matches '[a-zA-Z¡-￿ 0-9_\-./]+'
+data matches '([a-zA-Z¡-￿ 0-9_\-./]+)\.(md|Md|MD)'
+arg isfile	$0
+plumb to markdown
+plumb start markdown-plumb $file
