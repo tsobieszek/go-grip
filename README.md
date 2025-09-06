@@ -1,3 +1,37 @@
+## Fork Changes
+
+This fork includes the following changes from the original repository:
+
+*   CSS styling has been updated.
+*   A systemd service file has been added.
+*   A plumbing rule for plan9port has been added.
+*   A `make install` rule has been added.
+*   The HTML title of the rendered markdown is now the filename.
+
+## Build and Install from Source
+
+To build and install this project from source, you will need to have Go and Make installed.
+
+### Build
+
+To build the project, run the following command:
+
+```sh
+make build
+```
+
+This will create a binary named `go-grip` in the `bin` directory.
+
+### Install
+
+To install the `go-grip` binary to `/usr/local/bin`, run the following command:
+
+```sh
+sudo make install
+```
+
+---
+
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
