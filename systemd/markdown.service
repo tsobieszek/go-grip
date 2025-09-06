@@ -1,0 +1,11 @@
+[Unit]
+Description=Grip Markdown Server
+Documentation=https://github.com/chrishrb/go-grip
+
+[Service]
+Type=simple
+WorkingDirectory=%h
+ExecStart=go-grip -b=false --bounding-box=false /
+
+[Install]
+WantedBy=default.target
