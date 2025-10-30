@@ -34,6 +34,9 @@ func NewParser(theme string) *Parser {
 }
 
 func (m Parser) MdToHTML(bytes []byte) []byte {
+	// Preprocess markdown to add blank lines before lists for GFM-style behavior
+	bytes = preprocessMarkdown(bytes)
+
 	extensions := parser.NoIntraEmphasis | parser.Tables | parser.FencedCode |
 		parser.Autolink | parser.Strikethrough | parser.SpaceHeadings | parser.HeadingIDs |
 		parser.BackslashLineBreak | parser.MathJax | parser.OrderedListStart |
@@ -279,4 +282,90 @@ func renderMermaid(content string, theme string) (string, error) {
 		return "", err
 	}
 	return tpl.String(), nil
+}
+
+// preprocessMarkdown adds blank lines before lists that don't have one
+// to ensure they are rendered as lists (GFM-style behavior)
+func preprocessMarkdown(md []byte) []byte {
+	lines := bytes.Split(md, []byte("\n"))
+	var result [][]byte
+	inCodeBlock := false
+
+	for i, line := range lines {
+		// Track fenced code blocks to avoid modifying them
+		trimmed := bytes.TrimSpace(line)
+		if bytes.HasPrefix(trimmed, []byte("```")) || bytes.HasPrefix(trimmed, []byte("~~~")) {
+			inCodeBlock = !inCodeBlock
+			result = append(result, line)
+			continue
+		}
+
+		// Skip if we're inside a code block
+		if inCodeBlock {
+			result = append(result, line)
+			continue
+		}
+
+		// Check if we need to add a blank line before this line
+		if i > 0 {
+			prevLine := lines[i-1]
+			prevTrimmed := bytes.TrimSpace(prevLine)
+
+			// If previous line is not empty and current line starts a list
+			if len(prevTrimmed) > 0 && isListStart(trimmed) {
+				// Only add blank line if previous line is not already a list item
+				if !isListStart(prevTrimmed) {
+					result = append(result, []byte(""))
+				}
+			}
+		}
+
+		result = append(result, line)
+	}
+
+	return bytes.Join(result, []byte("\n"))
+}
+
+// isListStart checks if a line starts a list item (ordered or unordered)
+func isListStart(line []byte) bool {
+	if len(line) == 0 {
+		return false
+	}
+
+	// Remove blockquote prefixes to check for lists inside blockquotes
+	for bytes.HasPrefix(line, []byte(">")) {
+		line = bytes.TrimPrefix(line, []byte(">"))
+		line = bytes.TrimLeft(line, " \t")
+	}
+
+	// If we removed everything, it was just blockquote markers
+	if len(line) == 0 {
+		return false
+	}
+
+	// Check for unordered list markers: -, *, + followed by space
+	if len(line) >= 2 {
+		if (line[0] == '-' || line[0] == '*' || line[0] == '+') && line[1] == ' ' {
+			return true
+		}
+	}
+
+	// Check for ordered list: digits followed by . or ) and space
+	// Pattern: "1. " or "1) " or "123. " etc.
+	digitCount := 0
+	for i := 0; i < len(line); i++ {
+		if line[i] >= '0' && line[i] <= '9' {
+			digitCount++
+			continue
+		}
+		// After digits, expect . or ) followed by space
+		if digitCount > 0 && (line[i] == '.' || line[i] == ')') {
+			if i+1 < len(line) && line[i+1] == ' ' {
+				return true
+			}
+		}
+		break
+	}
+
+	return false
 }
